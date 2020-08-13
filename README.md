@@ -1,8 +1,8 @@
-#GPGPU Tutorial
+# GPGPU Tutorial
 
 
-##OpenCL
+## OpenCL
 
 
-##OpenGL
+## OpenGL
 
