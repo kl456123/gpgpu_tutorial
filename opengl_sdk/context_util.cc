@@ -1,19 +1,9 @@
 #include "context.h"
-#include <iostream>
 
 
-void OpenGLCheckErrorWithLocation(int line){
-            GLenum err = glGetError();
-            if (err != GL_NO_ERROR) {
-                std::cerr<<"OpenGL error, code=" << err << ": "
-                    << GLGetErrorString(err)<<"\nin main.cpp: "<<line << std::endl;
-		abort();
-            }
-        }
-
-
-
-const char *GLGetErrorString(GLenum error) {
+namespace opengl{
+    namespace example{
+        const char *GLGetErrorString(GLenum error) {
             switch (error) {
                 case GL_NO_ERROR:
                     return "GL_NO_ERROR";
@@ -29,3 +19,12 @@ const char *GLGetErrorString(GLenum error) {
                     return "Unknown OpenGL error code";
             }
         }
+        void OpenGLCheckErrorWithLocation(int line){
+            GLenum err = glGetError();
+            if (err != GL_NO_ERROR) {
+                LOG(FATAL) << "OpenGL error, code=" << err << ": "
+                    << GLGetErrorString(err)<<"\nin main.cpp: "<<line << std::endl;
+            }
+        }
+    }
+}

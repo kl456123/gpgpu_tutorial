@@ -1,23 +1,19 @@
 cmake_minimum_required(VERSION 3.2.0)
 
-project(opengl VERSION 1.0)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -std=c++14")
+project(opengl_sdk)
 
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake/Modules)
+find_package(glog REQUIRED)
 
-find_package(OpenCV REQUIRED)
-find_package(Glog REQUIRED)
-find_package(glfw3 REQUIRED)
 
-set(OpenGL_LIB -lglfw3 -pthread -lrt -lm -ldl)
-#if(BUILD_ARM)
-set(OpenGL_LIB ${OpenGL_LIB} -lGLESv2)
-set(OpenGL_LIB ${OpenGL_LIB} -lEGL)
-#else()
-#    set(OpenGL_LIB ${OpenGL_LIB} -lGL)
-#endif()
+# opengles version of fbo
+# use glfw
+add_executable(fbo_glfw ${CMAKE_CURRENT_SOURCE_DIR}/fbo_demo.cc
+    ${CMAKE_CURRENT_SOURCE_DIR}/glfw_context.cc
+    ${CMAKE_CURRENT_SOURCE_DIR}/context_util.cc)
+target_link_libraries(fbo_glfw -lGLESv2 -lglfw -lGL glog::glog)
 
-add_executable(demo demo.cc init.cc context.cc)
-
-# use both in case anyone of them not found
-target_link_libraries(demo ${OpenGL_LIB} ${GLOG_LIBRARIES})
+# use egl
+add_executable(fbo_egl ${CMAKE_CURRENT_SOURCE_DIR}/fbo_demo.cc
+    ${CMAKE_CURRENT_SOURCE_DIR}/egl_context.cc
+    ${CMAKE_CURRENT_SOURCE_DIR}/context_util.cc)
+target_link_libraries(fbo_egl -lGLESv2 -lEGL -lGL glog::glog)
